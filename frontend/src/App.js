@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AppBar from "@material-ui/core/AppBar";
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu"
 import Dash from './components/dashboard/dash';
+import Login from './components/Authentication/login';
 
 const useStyles = makeStyles({
   title:{
@@ -56,6 +58,11 @@ class App extends Component {
           </Toolbar>
         </AppBar>
         <div>
+        <Router>
+            <Switch>
+                <Route exact path='/login' component={Login} />
+            </Switch>
+        </Router>
           {this.state.currentScreen}
         </div>
       </div>
