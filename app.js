@@ -22,7 +22,7 @@ app.get("*", (req, res) => {
 })
 // MongoDB SetUp:
 
-let dev_url = 'mongodb://localhost:27017/shopping'
+let dev_url = 'mongodb://localhost:27017/shopping';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

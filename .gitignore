@@ -7,7 +7,7 @@ frontend/.pnp
 frontend/.pnp.js
 
 node_modules
-
+.idea*
 # testing
 frontend/coverage
 
