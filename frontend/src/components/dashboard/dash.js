@@ -82,7 +82,7 @@ class Dash extends Component {
 					marginHeight="0"
 					marginWidth="0"
 					title={"Map of shopping mall"}
-					src="https://www.google.com/maps/embed/v1/place?q=place_id:EhtONSwgR29iaW5kb2dvbmosIEJhbmdsYWRlc2giLiosChQKEgmFvBlTjMBVNxE4SigNTtWPkRIUChIJaX4X4IPi_DkROqVVjrPs_Hw&key=AIzaSyClGuqvS5S9nLZiy6oxMgEa8n1UfYCtOBw">
+					src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJpTIYWI_i_DkRCAAGlNBaD5U&key=AIzaSyClGuqvS5S9nLZiy6oxMgEa8n1UfYCtOBw">
 				</iframe>
 			</ThemeProvider>
 			)
