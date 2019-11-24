@@ -62,11 +62,12 @@ class Dash extends Component {
 				<Card className={classes.cardStyle}>
 					<CardContent className={classes.cardTitle}>
 						<Typography variant="h3" component="h2">
-                            <b>Ahsan Plaza</b>
+                            <b>Dr. Ahason Plaza</b>
 						</Typography>
                         <img style={{marginTop: '5%', height: 140}} alt={"home page icon"} src={Home}/> <br/>
                         <Typography variant="h5" component="h2">
-                            <b>Location:</b> Gaibandha district, Bangladesh
+                            <b>Location:</b> Kamdia Rd, Gobindogonj (গোবিন্দগঞ্জ), Gaibandha, Bangladesh <br/>
+							<b>Contact Number: </b> +8801718023191
                         </Typography>
 					</CardContent>
 					<Button variant="contained" color="primary" a href="/login" className={classes.button}>
