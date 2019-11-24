@@ -29,15 +29,6 @@ function withMyHook(Component){
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      currentScreen: []
-    }
-  }
-
-  componentWillMount() {
-    let homePage=[];
-    homePage.push(<Dash appContext={this}/>);
-    this.setState({currentScreen: homePage})
   }
 
   render(){
@@ -60,10 +51,10 @@ class App extends Component {
         <div>
         <Router>
             <Switch>
+                <Route exact path='/' component={Dash} />
                 <Route exact path='/login' component={Login} />
             </Switch>
         </Router>
-          {this.state.currentScreen}
         </div>
       </div>
       )
