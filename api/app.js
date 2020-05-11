@@ -10,19 +10,22 @@ var logger = require('morgan');
 
 // API routers
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
-// react route setup
-app.use(express.static(path.join(__dirname, "frontend", "build")));
-// react root
-app.get("*", (req, res) => {
-	res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
-})
-// MongoDB SetUp:
+// react routes
+app.use(express.static(path.join(__dirname, '../build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build'))
+});
 
-let dev_url = 'mongodb://localhost:27017/shopping';
+// MongoDB SetUp:
+let dev_url = 'mongodb+srv://admin:admin@testcluster1-wsjqz.mongodb.net/test?retryWrites=true&w=majority';
+let mongoDB = process.env.MONGO_URI || dev_url;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.Promise = global.Promise;
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,7 +42,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
