@@ -14,7 +14,6 @@
   },
   "scripts": {
     "start": "node api/bin/www",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build",
     "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
