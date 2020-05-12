@@ -1,19 +1,28 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Dash from './components/dashboard/dash';
-import Login from './components/Authentication/login';
+import Dashboard from "./components/Dashboard/dash";
+import './App.css';
 
-class App extends Component {
+class App extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            currentScreen: []
+        }
+    }
 
-  render(){
-    return(
-        <Router>
-            <Switch>
-                <Route exact path='/' component={Dash} />
-                <Route exact path='/login' component={Login} />
-            </Switch>
-        </Router>
-      )
-  }
+    componentDidMount() {
+        this.setState({
+            currentScreen: <Dashboard appContext={this}/>
+        })
+    }
+
+    render(){
+        return (
+            <div className="App">
+                {this.state.currentScreen}
+            </div>
+        );
+    }
 }
+
 export default App;

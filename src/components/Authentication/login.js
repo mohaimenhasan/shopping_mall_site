@@ -11,6 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import axios from 'axios';
 
 function Copyright() {
     return (
@@ -77,21 +78,31 @@ class Login extends Component {
         }
     }
 
+    handleClick = (event) => {
+        axios
+            .post("/users/verify", {
+                username: this.state.username,
+                password: this.state.password
+            }).then(res => {
+                if (res.status === 200){
+                    window.alert("Verified user")
+                }
+        }).catch( res => {
+            window.alert("Bad Username or Password")
+        })
+    };
+
     handleUsernameChange = (event) => {
         this.setState({
             username: event.target.value
         })
-    }
+    };
 
     handlePasswordChange = (event) => {
         this.setState({
             password: event.target.value
         })
-    }
-    handleClick(event){
-        console.log("Username is: "+this.state.username);
-        console.log("Password is: "+this.state.password);
-    }
+    };
 
     render(){
         const classes = this.props.classes;

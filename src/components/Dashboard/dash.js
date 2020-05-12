@@ -18,6 +18,8 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import Login from '../Authentication/login';
+import SignUp from "../Authentication/signup";
 
 function Copyright() {
 	return (
@@ -126,6 +128,18 @@ class Dash extends Component {
 		}
 	}
 
+	changeToLogin(event){
+		this.props.appContext.setState({
+			currentScreen: <Login appContext={this.props.appContext}/>
+		})
+	}
+
+	changeToSignUp(event){
+		this.props.appContext.setState({
+			currentScreen: <SignUp appContext={this.props.appContext}/>
+		})
+	}
+
 	render(){
 		const classes = this.props.classes;
 		const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -168,7 +182,7 @@ class Dash extends Component {
 											color="primary"
 											className={classes.button}
 											startIcon={<VpnKeyIcon/>}
-											onClick={(event)=>{console.log("Clicked")}}
+											onClick={(event)=> this.changeToLogin(event)}
 										>
 											Login
 										</Button> <br/>
@@ -177,7 +191,7 @@ class Dash extends Component {
 											color="secondary"
 											className={classes.button}
 											startIcon={<LockOpenIcon/>}
-											onClick={(event)=>{console.log("Clicked")}}
+											onClick={(event)=> this.changeToSignUp(event)}
 										>
 											Sign Up
 										</Button>

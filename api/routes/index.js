@@ -8,6 +8,6 @@ router.get('/', function(req, res, next) {
 
 router.get('/test', function(req, res, next){
   res.send("Hello Darkness My old friend")
-})
+});
 
 module.exports = router;

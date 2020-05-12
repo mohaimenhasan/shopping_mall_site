@@ -10,7 +10,7 @@ var logger = require('morgan');
 
 // API routers
 var indexRouter = require('./routes/index');
-
+var userRouter = require('./routes/users');
 var app = express();
 
 // react routes
@@ -22,6 +22,7 @@ app.get('*', (req, res) => {
 // MongoDB SetUp:
 let dev_url = 'mongodb+srv://admin:admin@testcluster1-wsjqz.mongodb.net/test?retryWrites=true&w=majority';
 let mongoDB = process.env.MONGO_URI || dev_url;
+mongoose.set('useCreateIndex', true);
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 let db = mongoose.connection;
@@ -42,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
 app.use('/', indexRouter);
-
+app.use('/users', userRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -1,178 +1,190 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import fetch from 'node-fetch';
-const api_base_url= "http://localhost:8888/location";
+import React, {Component} from 'react';
+import Typography from "@material-ui/core/Typography";
+import { createMuiTheme } from '@material-ui/core/styles';
+import Button from "@material-ui/core/Button";
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Link from '@material-ui/core/Link';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import TextField from "@material-ui/core/TextField";
+import Avatar from "@material-ui/core/Avatar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import axios from 'axios';
 
-class SignUp extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            firstname: '',
-            lastname: '',
-            email: '',
-            interests:'',
-            password:''
-        }
-    }
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textPrimary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://www.linkedin.com/in/mohaimenkhan/">
+                Mohaimen Khan
+            </Link>{' '}
+            {new Date().getFullYear()}
+        </Typography>
+    );
+}
 
-    handleFirstChange = (event) => {
-        this.setState({
-            firstname: event.target.value,
-        });
-    };
-    handleLastChange = (event) => {
-        this.setState({
-            lastname: event.target.value,
-        });
-    };
-    handleEmailChange = (event) => {
-        this.setState({
-            email: event.target.value,
-        });
-    };
-    handleInterestChange = (event) => {
-        this.setState({
-            interests: event.target.value,
-        });
-    };
-    handlePasswordChange = (event) => {
-        this.setState({
-            password: event.target.value,
-        });
-    };
-    handleClick(event){
-        let apiUrl = api_base_url+'/add_user';
-        let self = this;
-        console.log(this.state);
+const theme = createMuiTheme({
+    typography: {
+        fontFamily: '"Apple Color Emoji"'
+    },
+});
 
-        if(this.state.firstname.length>0 && this.state.lastname.length>0 && this.state.email.length>0 && this.state.password.length>0 && this.state.interests.length>0){
-            fetch(apiUrl,
-                {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": '*'
-                    },
-                    body: JSON.stringify({
-                            email: this.state.email,
-                            password: this.state.password,
-                            interests: this.state.interests,
-                            first: this.state.firstname,
-                            last: this.state.lastname
-                        }
-                    )
-                }).then(my_resp => my_resp.json())
-                .then(response =>{
-                    console.log(response);
-                    if(response["code"] === 200){
-                        alert("User created successfully");
-                        window.location.href = ('http://localhost:3000/')
-                    }
-                    else{
-                        console.log("Some error occurred: ",response.data.code);
-                    }
-                }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        else{
-            console.log(this.state.firstname.length>0);
-            console.log(this.state.lastname.length>0);
-            console.log(this.state.email.length>0);
-            console.log(this.state.password.length>0);
-            console.log(this.state.username.length>0);
-            alert("Input field value is missing");
-        }
-    }
-    componentWillReceiveProps(nextProps){
-        console.log("nextProps",nextProps);
-    }
-    render() {
-        return(
-            <div style={{
-                marginTop: "3%",
-                marginLeft: "38%",
-                position: "center",
-                alignItems: "center",
-                width: "25%"
-            }}>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="first"
-                    label="First Name"
-                    name="first"
-                    autoFocus
-                    onChange={this.handleFirstChange}
-                />
-                <br/>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="last"
-                    label="Last Name"
-                    name="last"
-                    autoFocus
-                    onChange={this.handleLastChange}
-                />
-                <br/>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    onChange={this.handleEmailChange}
-                />
-                <br/>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="interests"
-                    label="Interests"
-                    name="interests"
-                    autoFocus
-                    onChange={this.handleInterestChange}
-                />
-                <br/>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    onChange={this.handlePasswordChange}
-                />
-                <br/>
-                <Button variant="contained" color="primary" onClick={(event) => this.handleClick(event,this.props.role)} style={{
-                    marginTop: "5%",
-                    marginLeft: "30%"
-                }}>
-                    Sign Up
-                </Button>
-            </div>
-        )
+const useStyles = makeStyles({
+    root: {
+        height: '100vh',
+    },
+    paper: {
+        margin: theme.spacing(8, 4),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+});
+
+function withMyHook(Component){
+    return function WrappedComponent(props){
+        const classes = useStyles();
+        return <Component {...props} classes={classes}/>
     }
 }
 
-const style = {
-    margin: 15,
-};
+class SignUp extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: "",
+            password: ""
+        }
+    }
+
+    handleClick = (event) => {
+        axios
+            .post("/users/verify", {
+                username: this.state.username,
+                password: this.state.password
+            }).then(res => {
+            if (res.status === 200){
+                window.alert("Verified user")
+            }
+        }).catch( res => {
+            window.alert("Bad Username or Password")
+        })
+    };
+
+    handleUsernameChange = (event) => {
+        this.setState({
+            username: event.target.value
+        })
+    };
+
+    handlePasswordChange = (event) => {
+        this.setState({
+            password: event.target.value
+        })
+    };
+
+    render(){
+        const classes = this.props.classes;
+        return(
+            <Grid container component="main" className={classes.root}>
+                <CssBaseline />
+                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                    <div className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign Up
+                        </Typography>
+                        <br/>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="fname"
+                                    name="firstName"
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    autoFocus
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    autoComplete="lname"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justify="flex-end">
+                            <Grid item>
+                                <Link href="#" variant="body2">
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
+                        <Box mt={5}>
+                            <Copyright />
+                        </Box>
+                    </div>
+                </Grid>
+            </Grid>
+        )
+
+    }
+}
 
 
+SignUp = withMyHook(SignUp);
 export default SignUp;
