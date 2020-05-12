@@ -2,8 +2,8 @@
 
 # dependencies
 node_modules
-frontend/.pnp
-frontend/.pnp.js
+client/.pnp
+client/.pnp.js
 
 .idea*
 # testing
