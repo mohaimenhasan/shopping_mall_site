@@ -12,6 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import axios from 'axios';
+import Login from "./login";
+import Dash from "../Dashboard/dash";
 
 function Copyright() {
     return (
@@ -52,6 +54,14 @@ const useStyles = makeStyles({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    image: {
+        backgroundImage: 'url(https://picsum.photos/id/1016/3844/2563)',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor:
+            theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+    },
 });
 
 function withMyHook(Component){
@@ -66,21 +76,68 @@ class SignUp extends Component {
         super(props);
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            storeName: "",
+            employeeNumber: 0,
+            leaseNumber: 0,
+            rent: 0,
         }
     }
 
+    checkVals(){
+        if (this.state.username === "" || this.state.password === "" || this.state.store() === "" ||
+            this.state.employeeNumber === "" || this.state.leaseNumber === "" || this.state.rent === ""){
+            return false;
+        }
+        return !(this.state.username === undefined || this.state.password === undefined || this.state.store() === undefined ||
+            this.state.employeeNumber === undefined || this.state.leaseNumber === undefined || this.state.rent === undefined);
+
+    }
     handleClick = (event) => {
+        if (this.checkVals() === false){
+            window.alert("Not all values passed in properly. Please check again");
+            return;
+        }
         axios
-            .post("/users/verify", {
+            .post("/users/create", {
                 username: this.state.username,
-                password: this.state.password
+                password: this.state.password,
+                storeName: this.state.storeName,
+                rent: this.state.rent,
+                leaseNumber: this.state.leaseNumber,
+                employeeNumber: this.state.employeeNumber
             }).then(res => {
             if (res.status === 200){
-                window.alert("Verified user")
+                this.props.appContext.setState({
+                    currentScreen: <Dash appContext={this.props.appContext}/>
+                })
             }
         }).catch( res => {
-            window.alert("Bad Username or Password")
+            window.alert("Bad Request. Please Try Again")
+        })
+    };
+
+    handleRentChange = (event) => {
+        this.setState({
+            rent: event.target.value
+        })
+    };
+
+    handleLeaseNumberChange = (event) => {
+        this.setState({
+           leaseNumber : event.target.value
+        })
+    };
+
+    handleEmployeeNumberChange = (event) => {
+        this.setState({
+            employeeNumber : event.target.value
+        })
+    };
+
+    handleStoreNameChange = (event) => {
+        this.setState({
+            storeName: event.target.value
         })
     };
 
@@ -96,11 +153,18 @@ class SignUp extends Component {
         })
     };
 
+    changeToLogin = (event) => {
+        this.props.appContext.setState({
+            currentScreen: <Login appContext={this.props.appContext}/>
+        })
+    };
+
     render(){
         const classes = this.props.classes;
         return(
             <Grid container component="main" className={classes.root}>
                 <CssBaseline />
+                <Grid item xs={false} sm={4} md={7} className={classes.image} />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                     <div className={classes.paper}>
                         <Avatar className={classes.avatar}>
@@ -113,41 +177,82 @@ class SignUp extends Component {
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                    autoComplete="fname"
-                                    name="firstName"
                                     variant="outlined"
+                                    margin="normal"
                                     required
                                     fullWidth
-                                    id="firstName"
-                                    label="First Name"
+                                    id="storeName"
+                                    label="Store Name"
+                                    name="storeName"
                                     autoFocus
+                                    value={this.state.storeName}
+                                    onChange = {this.handleStoreNameChange}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     variant="outlined"
+                                    margin="normal"
                                     required
                                     fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="lname"
+                                    id="storeName"
+                                    label="Number of Employees"
+                                    name="employeeNumber"
+                                    type="number"
+                                    autoFocus
+                                    value={this.state.employeeNumber}
+                                    onChange = {this.handleEmployeeNumberChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="leaseNumber"
+                                    label="Lease Number"
+                                    name="leaseNumber"
+                                    type="number"
+                                    autoFocus
+                                    value={this.state.leaseNumber}
+                                    onChange = {this.handleLeaseNumberChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="rent"
+                                    label="Monthly Rent"
+                                    name="rent"
+                                    type="number"
+                                    autoFocus
+                                    value={this.state.rent}
+                                    onChange = {this.handleRentChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
+                                    margin="normal"
                                     required
                                     fullWidth
                                     id="email"
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    autoFocus
+                                    value={this.state.username}
+                                    onChange = {this.handleUsernameChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
+                                    margin="normal"
                                     required
                                     fullWidth
                                     name="password"
@@ -155,6 +260,8 @@ class SignUp extends Component {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    value={this.state.password}
+                                    onChange = {this.handlePasswordChange}
                                 />
                             </Grid>
                         </Grid>
@@ -169,7 +276,7 @@ class SignUp extends Component {
                         </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href="#" variant="body2" onClick={(event) => this.changeToLogin(event)}>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

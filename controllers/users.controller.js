@@ -45,7 +45,8 @@ exports.createUser = async function(req, res, next){
     try{
         let newuser = new Users({
             username: req.body.username,
-            password: req.body.password
+            password: req.body.password,
+            name: req.body.name
         });
         newuser.save(function(err) {
             if (err) throw err;

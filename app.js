@@ -11,6 +11,7 @@ var logger = require('morgan');
 // API routers
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/users');
+var storeRouter = require('./routes/store');
 var app = express();
 
 // react routes
@@ -18,11 +19,13 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 // react root
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-})
+});
+
 // MongoDB SetUp:
 let dev_url = 'mongodb+srv://admin:admin@testcluster1-wsjqz.mongodb.net/test?retryWrites=true&w=majority';
 let mongoDB = process.env.MONGO_URI || dev_url;
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 let db = mongoose.connection;
@@ -44,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use('/', indexRouter);
 app.use('/users', userRouter);
+app.use('/stores', storeRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

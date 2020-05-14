@@ -9,21 +9,18 @@ import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import Clock from 'react-clock';
 import Login from '../Authentication/login';
 import SignUp from "../Authentication/signup";
 
 function Copyright() {
 	return (
-		<Typography variant="body2" color="textPrimary" align="center">
+		<Typography variant="body2" color="textPrimary" align="center" style={{color: "white"}}>
 			{'Copyright © '}
 			<Link color="inherit" href="https://www.linkedin.com/in/mohaimenkhan/">
 				Mohaimen Khan
@@ -100,6 +97,7 @@ const useStyles = makeStyles({
 		paddingBottom: theme.spacing(4),
 	},
 	paper: {
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 		padding: theme.spacing(2),
 		display: 'flex',
 		overflow: 'auto',
@@ -111,6 +109,10 @@ const useStyles = makeStyles({
 	button: {
 		margin: theme.spacing(1),
 	},
+	clock: {
+		height: 300,
+		width: 300
+	}
 });
 
 function withMyHook(Component){
@@ -122,10 +124,17 @@ function withMyHook(Component){
 
 class Dash extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
-
+			date: new Date()
 		}
+	}
+
+	componentDidMount() {
+		setInterval(
+			() => this.setState({ date: new Date() }),
+			1000
+		);
 	}
 
 	changeToLogin(event){
@@ -145,35 +154,32 @@ class Dash extends Component {
 		const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 		return(
 			<div className={classes.root}>
-				<AppBar position="absolute" className={clsx(classes.appBar, this.state.open && classes.appBarShift)}>
-					<Toolbar className={classes.toolbar}>
-						<IconButton
-							edge="start"
-							color="inherit"
-							aria-label="open drawer"
-							className={clsx(classes.menuButton, this.state.open && classes.menuButtonHidden)}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-							Dashboard
-						</Typography>
-					</Toolbar>
-				</AppBar>
 				<main className={classes.content}>
-					<div className={classes.appBarSpacer} />
 					<Container maxWidth="lg" className={classes.container}>
 						<Grid container spacing={3}>
+							<Grid item xs={12} md={12} lg={12}>
+								<div style={{
+									display: 'flex',
+									justifyContent: 'center'
+								}}>
+									<Clock
+										value={this.state.date}
+										size={180}
+									/>
+								</div>
+							</Grid>
 							<Grid item xs={12} md={12} lg={6}>
-								<Card className={classes.root}>
+								<Card className={classes.root} style={{
+									backgroundColor: 'rgba(0, 0, 0, 0.5)'
+								}}>
 									<CardContent>
 										<br/>
 										<Typography variant="h4" color="textPrimary" component="p">
-											<b>Dr. Ahason Plaza</b>
+											<b style={{color: "white"}}>Dr. Ahasan Plaza</b>
 										</Typography>
 										<img style={{marginTop: '5%', height: 140}} alt={"home page icon"} src={Home}/>
 										<br/>
-										<Typography variant="h6" component="p">
+										<Typography variant="h6" component="p" style={{color: "white"}}>
 											<b>Location:</b> Kamdia Rd, Gobindogonj (গোবিন্দগঞ্জ), Gaibandha, Bangladesh <br/>
 											<b>Contact Number: </b> +8801718023191
 										</Typography> <br/>

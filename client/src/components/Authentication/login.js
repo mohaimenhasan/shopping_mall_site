@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import axios from 'axios';
+import SignUp from "./signup";
 
 function Copyright() {
     return (
@@ -36,7 +37,7 @@ const useStyles = makeStyles({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundImage: 'url(https://picsum.photos/id/1003/1181/1772)',
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -78,7 +79,24 @@ class Login extends Component {
         }
     }
 
+    checkVals(){
+        if (this.state.username === "" || this.state.password === ""){
+            return false;
+        }
+        return !(this.state.username === undefined || this.state.password === undefined);
+    }
+
+    changeToSignUp = (event) => {
+        this.props.appContext.setState({
+            currentScreen: <SignUp appContext={this.props.appContext}/>
+        })
+    };
+
     handleClick = (event) => {
+        if (this.checkVals() === false){
+            window.alert("Not all values passed in properly. Please check again");
+            return;
+        }
         axios
             .post("/users/verify", {
                 username: this.state.username,
@@ -161,7 +179,7 @@ class Login extends Component {
                                     </Link>
                                 </Grid>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link  href="#" variant="body2" onClick={(event) => this.changeToSignUp(event)}>
                                         {"Don't have an account? Sign Up"}
                                     </Link>
                                 </Grid>
