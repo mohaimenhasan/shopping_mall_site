@@ -13,7 +13,7 @@ import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import axios from 'axios';
 import Login from "./login";
-import Dash from "../Dashboard/dash";
+import Landing from "../Dashboard/landing";
 
 function Copyright() {
     return (
@@ -77,23 +77,19 @@ class SignUp extends Component {
         this.state = {
             username: "",
             password: "",
-            storeName: "",
-            employeeNumber: 0,
-            leaseNumber: 0,
-            rent: 0,
+            name: ""
         }
     }
 
     checkVals(){
-        if (this.state.username === "" || this.state.password === "" || this.state.store() === "" ||
-            this.state.employeeNumber === "" || this.state.leaseNumber === "" || this.state.rent === ""){
+        if (this.state.username === "" || this.state.password === "" || this.state.name === ""){
             return false;
         }
-        return !(this.state.username === undefined || this.state.password === undefined || this.state.store() === undefined ||
-            this.state.employeeNumber === undefined || this.state.leaseNumber === undefined || this.state.rent === undefined);
+        return !(this.state.username === undefined || this.state.password === undefined || this.state.name === undefined);
 
     }
     handleClick = (event) => {
+        console.log(this.state)
         if (this.checkVals() === false){
             window.alert("Not all values passed in properly. Please check again");
             return;
@@ -102,14 +98,11 @@ class SignUp extends Component {
             .post("/users/create", {
                 username: this.state.username,
                 password: this.state.password,
-                storeName: this.state.storeName,
-                rent: this.state.rent,
-                leaseNumber: this.state.leaseNumber,
-                employeeNumber: this.state.employeeNumber
+                name: this.state.name
             }).then(res => {
             if (res.status === 200){
                 this.props.appContext.setState({
-                    currentScreen: <Dash appContext={this.props.appContext}/>
+                    currentScreen: <Landing appContext={this.props.appContext}/>
                 })
             }
         }).catch( res => {
@@ -117,27 +110,9 @@ class SignUp extends Component {
         })
     };
 
-    handleRentChange = (event) => {
+    handleNameChange = (event) => {
         this.setState({
-            rent: event.target.value
-        })
-    };
-
-    handleLeaseNumberChange = (event) => {
-        this.setState({
-           leaseNumber : event.target.value
-        })
-    };
-
-    handleEmployeeNumberChange = (event) => {
-        this.setState({
-            employeeNumber : event.target.value
-        })
-    };
-
-    handleStoreNameChange = (event) => {
-        this.setState({
-            storeName: event.target.value
+            name: event.target.value
         })
     };
 
@@ -175,63 +150,18 @@ class SignUp extends Component {
                         </Typography>
                         <br/>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
                                     required
                                     fullWidth
-                                    id="storeName"
-                                    label="Store Name"
-                                    name="storeName"
+                                    id="name"
+                                    label="Full Name"
+                                    name="name"
                                     autoFocus
-                                    value={this.state.storeName}
-                                    onChange = {this.handleStoreNameChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="storeName"
-                                    label="Number of Employees"
-                                    name="employeeNumber"
-                                    type="number"
-                                    autoFocus
-                                    value={this.state.employeeNumber}
-                                    onChange = {this.handleEmployeeNumberChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="leaseNumber"
-                                    label="Lease Number"
-                                    name="leaseNumber"
-                                    type="number"
-                                    autoFocus
-                                    value={this.state.leaseNumber}
-                                    onChange = {this.handleLeaseNumberChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="rent"
-                                    label="Monthly Rent"
-                                    name="rent"
-                                    type="number"
-                                    autoFocus
-                                    value={this.state.rent}
-                                    onChange = {this.handleRentChange}
+                                    value={this.state.name}
+                                    onChange = {this.handleNameChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -271,6 +201,7 @@ class SignUp extends Component {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={(event) => this.handleClick(event)}
                         >
                             Sign Up
                         </Button>

@@ -18,9 +18,4 @@ RentSchema.pre('save', function(next) {
     return next();
 });
 
-RentSchema.pre('update', function(next) {
-    this.updatedAt = Date.now();
-    return next();
-});
-
 module.exports = mongoose.model('Rent', RentSchema);

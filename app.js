@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 var createError = require('http-errors');
 var cors = require('cors');
 var express = require('express');
@@ -17,7 +17,7 @@ var app = express();
 // react routes
 app.use(express.static(path.join(__dirname, "client", "build")));
 // react root
-app.get("*", (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 

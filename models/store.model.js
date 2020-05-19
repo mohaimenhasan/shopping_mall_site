@@ -2,7 +2,7 @@ const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 let StoreSchema = new Schema({
-    name: {type: String, required: true},
+    name: {type: String, required: true, index: { unique: true }},
     leaseStart: { type: Date, required: true, default: Date.now },
     leaseEnd: {type: Date, required: true, default: Date.now()},
     leaseAmount: {type: Number, required: true},
@@ -17,11 +17,6 @@ let StoreSchema = new Schema({
 });
 
 StoreSchema.pre('save', function(next) {
-    this.updatedAt = Date.now();
-    return next();
-});
-
-StoreSchema.pre('update', function(next) {
     this.updatedAt = Date.now();
     return next();
 });

@@ -16,8 +16,8 @@ exports.update_lease_paid = function(req, res, next){
     }catch (e) {
         console.log("Error with updating lease paid");
         console.log(e);
-        req.status(400);
-        req.send("Could not update lease paid");
+        res.status(400);
+        res.send("Could not update lease paid");
     }
 };
 
@@ -36,14 +36,14 @@ exports.update_rent_paid = function(req, res, next){
     }catch (e) {
         console.log("Error with payment processing");
         console.log(e);
-        req.status(400);
-        req.send("Error with payment processing")
+        res.status(400);
+        res.send("Error with payment processing")
     }
 };
 
 exports.create_store = function (req,res, next) {
     try{
-        let newstore = {
+        let newstore = new Store({
             name: req.body.storeName,
             leaseStart: req.body.leaseStart,
             leaseEnd: req.body.leaseEnd,
@@ -51,41 +51,41 @@ exports.create_store = function (req,res, next) {
             leasePaid: req.body.leasePaid,
             rent: req.body.rent,
             createdBy: req.body.createdBy,
-            updatedBy: req.body.createdBy,
-            updatedAt: Date.now()
-        };
-        let query = {'name': req.body.storeName};
-        Store.findOneAndUpdate(query, newstore, {upsert: true}, function(err, store){
-            if (err) throw err;
-            let allRents = create_rents(req.body.leaseStart, req.body.leaseEnd, req.body.storeName, req.body.rent, req.body.createdBy);
-            if (allRents.length === 0){
-                throw "Problems with creating rents"
-            }
-            res.status(200);
-            res.send("New Store created");
+            updatedBy: req.body.createdBy
         });
+        newstore.save(function(err){
+            if (err){
+               throw err
+            }
+            else{
+                let allRents = create_rents(req.body.leaseStart, req.body.leaseEnd, req.body.storeName, req.body.rent, req.body.createdBy);
+                if (allRents.length === 0){
+                    throw "Problems with creating rents"
+                }
+                res.status(200);
+                res.send("New Store created");
+            }
+        })
     }catch (e) {
-        console.log("Error with creating new store")
+        console.log("Error with creating new store");
         console.log(e);
-        req.status(400);
-        req.send("Could not create new store")
+        res.status(400);
+        res.send("Could not create new store")
     }
 };
 
 function create_monthly_rent(date, amount, storeName, user) {
     try{
-        let query = {'name': storeName, paymentPeriod: date};
-        let newrent = {
+        let newrent = new Rent({
             name: storeName,
             paymentPeriod: date,
             paymentVal: amount,
             amountPaid: 0,
             updatedBy: user,
             updatedAt: Date.now()
-        };
-        Rent.findOneAndUpdate(query, newrent, {upsert: true}, function(err, _done_) {
+        });
+        newrent.save(function(err) {
             if (err) throw err;
-            return _done_
         });
 
     }catch (e) {
@@ -129,5 +129,23 @@ function create_rents(start_date, end_date, storeName, amount, username) {
         console.log("Error with creating rent values")
         console.log(e);
         return []
+    }
+}
+
+exports.get_all_stores = async function (req, res, next) {
+    try{
+        await Store.find()
+            .then(allstore => {
+                res.status(200);
+                res.send({'stores': allstore})
+            }).catch(e => {
+                throw e
+            })
+
+    }catch (e) {
+        console.log("Error with getting number of stores")
+        console.log(e);
+        res.status(400);
+        res.send("Could not get number of stores")
     }
 }
