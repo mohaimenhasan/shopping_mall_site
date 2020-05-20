@@ -13,6 +13,7 @@ import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import axios from 'axios';
 import SignUp from "./signup";
+import Dash from "../Dashboard/dash";
 
 function Copyright() {
     return (
@@ -87,7 +88,7 @@ class Login extends Component {
     }
 
     changeToSignUp = (event) => {
-        this.props.appContext.setState({
+        this.appContext.setState({
             currentScreen: <SignUp appContext={this.props.appContext}/>
         })
     };
@@ -103,7 +104,9 @@ class Login extends Component {
                 password: this.state.password
             }).then(res => {
                 if (res.status === 200){
-                    window.alert("Verified user")
+                    this.props.appContext.setState({
+                        currentScreen: <Dash appContext={this.props.appContext} user={this.state.username}/>
+                    })
                 }
         }).catch( res => {
             window.alert("Bad Username or Password")

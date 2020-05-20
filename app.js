@@ -14,6 +14,7 @@ var userRouter = require('./routes/users');
 var storeRouter = require('./routes/store');
 var app = express();
 
+
 // react routes
 app.use(express.static(path.join(__dirname, "client", "build")));
 // react root

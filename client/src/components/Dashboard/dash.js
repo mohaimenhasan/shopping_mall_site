@@ -5,26 +5,16 @@ import Clock from "react-clock";
 import Card from "@material-ui/core/Card";
 import {CardContent} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import Home from "../home.png";
 import Button from "@material-ui/core/Button";
-import VpnKeyIcon from "@material-ui/icons/VpnKey";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import {createMuiTheme, makeStyles} from "@material-ui/core/styles";
-import Link from "@material-ui/core/Link";
 import clsx from "clsx";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import AppBar from "@material-ui/core/AppBar";
 import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
 import {red} from "@material-ui/core/colors";
 import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
 import axios from "axios";
 
 const drawerWidth = 240;
@@ -122,22 +112,24 @@ class Dash extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            username: this.props.username,
-            name: "Mohaimen Khan",
+            name: this.props.user,
             today: new Date(),
             email: this.props.email,
             stores: [],
             storeCount: 0,
-            leaseCount: 0
+            leaseCount: 0,
         }
     }
 
     componentDidMount = async function () {
+        setInterval(
+            () => this.setState({ today: new Date() }),
+            1000
+        );
         await axios
             .get('stores/get_all')
             .then(res => {
                 let val = res.data;
-                console.log(val);
                 let allStores = [];
                 const classes = this.props.classes;
                 const listPaper = clsx(classes.paper, classes.storeHeight);
@@ -203,7 +195,7 @@ class Dash extends Component{
         }).catch( res => {
             window.alert(res);
         });
-    }
+    };
 
     render() {
         const classes = this.props.classes;
@@ -222,7 +214,7 @@ class Dash extends Component{
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={3}>
-                            <Grid item xs={12} md={4} lg={3}>
+                            <Grid item xs={12} md={12} lg={3}>
                                 <Paper className={leftBarPaper}>
                                     <Card>
                                         <CardHeader
@@ -252,9 +244,22 @@ class Dash extends Component{
                                     </Card>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12} md={7} lg={7}>
+                            <Grid item xs={12} md={12} lg={6}>
                                 <Paper className={fixedHeightPaper}>
                                     {this.state.stores}
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={12} md={12} lg={3}>
+                                <Paper className={leftBarPaper}>
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <Clock
+                                            value={this.state.today}
+                                            size={210}
+                                        />
+                                    </div>
                                 </Paper>
                             </Grid>
                         </Grid>
